@@ -278,6 +278,20 @@ class Board {
     return [hitCellImpact];
   }
 
+  List<CellHit> hitCellWithRandom() {
+    final List<CellHit> hitCellImpacts = [];
+    for (var i = 0; i < 10; i++) {
+      final randomLatitude = Random().nextInt(gridSize);
+      final randomLongitude = Random().nextInt(gridSize);
+      hitCellImpacts.add(hitCell(
+          Coordinates(latitude: randomLatitude, longitude: randomLongitude),
+          HitType.damage));
+    }
+    powerShotsUsed[PowerShots.random] =
+        (powerShotsUsed[PowerShots.random] ?? 0) + 1;
+    return hitCellImpacts;
+  }
+
   Map<PowerShots, int> get availablePowerShots {
     final unsunkShips = ships.where((ship) => !ship.isSunk);
     final availablePowerShots = {
@@ -294,18 +308,6 @@ class Board {
       }
     }
     return availablePowerShots;
-  }
-
-  List<CellHit> hitCellWithRandom() {
-    final List<CellHit> hitCellImpacts = [];
-    for (var i = 0; i < 10; i++) {
-      final randomLatitude = Random().nextInt(gridSize);
-      final randomLongitude = Random().nextInt(gridSize);
-      hitCellImpacts.add(hitCell(
-          Coordinates(latitude: randomLatitude, longitude: randomLongitude),
-          HitType.damage));
-    }
-    return hitCellImpacts;
   }
 }
 
