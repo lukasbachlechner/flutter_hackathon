@@ -159,7 +159,9 @@ class Board {
             ? isCellHasMine
                 ? CellHasWhat.shipAndMine
                 : CellHasWhat.ship
-            : CellHasWhat.ship);
+            : isCellHasMine
+                ? CellHasWhat.mine
+                : CellHasWhat.nothing);
     cellHits.add(cellHit);
     return cellHit;
   }
@@ -182,8 +184,7 @@ class Board {
       case PowerShots.radar:
         return hitCellWithRadar(coordinates);
       case PowerShots.random:
-        // return hitCellWithRandom(coordinates);
-        throw Exception('Random power shot not implemented');
+        return hitCellWithRandom();
       default:
         throw Exception('Invalid power shot');
     }
@@ -295,7 +296,17 @@ class Board {
     return availablePowerShots;
   }
 
-  // List<CellHit> hitCellWithRandom(Coordinates coordinates) {}
+  List<CellHit> hitCellWithRandom() {
+    final List<CellHit> hitCellImpacts = [];
+    for (var i = 0; i < 10; i++) {
+      final randomLatitude = Random().nextInt(gridSize);
+      final randomLongitude = Random().nextInt(gridSize);
+      hitCellImpacts.add(hitCell(
+          Coordinates(latitude: randomLatitude, longitude: randomLongitude),
+          HitType.damage));
+    }
+    return hitCellImpacts;
+  }
 }
 
 class CellHit {
@@ -307,4 +318,4 @@ class CellHit {
       {required this.coordinates, required this.status, required this.cellHas});
 }
 
-enum CellHasWhat { ship, shipAndMine, alreadyHit, undiscovered }
+enum CellHasWhat { ship, mine, shipAndMine, alreadyHit, undiscovered, nothing }
