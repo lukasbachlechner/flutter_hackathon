@@ -51,10 +51,7 @@ class ChoosingScreen extends StatelessWidget {
           Flexible(
             flex: 3,
             child: gameController.turn != GameStateTurn.transition
-                ? BoardWidget(
-                    board: gameController.currentBoard!,
-                    highlighted: const [],
-                  )
+                ? const BoardWidget()
                 : const SizedBox(),
           ),
           Flexible(
@@ -92,7 +89,7 @@ class ChoosingScreen extends StatelessWidget {
                   onPressed: gameController.turn == GameStateTurn.playerA &&
                           gameController.game.playerA.isBoardReady()
                       ? () {
-                          gameController.nextTurn();
+                          gameController.swapActivePlayer();
                         }
                       : null,
                   child: const Text('Next player'),
@@ -128,10 +125,7 @@ class PlayingScreen extends StatelessWidget {
           Flexible(
             flex: 3,
             child: gameController.turn != GameStateTurn.transition
-                ? BoardWidget(
-                    board: gameController.currentBoard!,
-                    highlighted: const [],
-                  )
+                ? const BoardWidget()
                 : const SizedBox(),
           ),
           const Flexible(
@@ -161,10 +155,7 @@ class PressToContinue extends StatelessWidget {
           Flexible(
             flex: 3,
             child: gameController.turn != GameStateTurn.transition
-                ? BoardWidget(
-                    board: gameController.currentBoard!,
-                    highlighted: const [],
-                  )
+                ? const BoardWidget()
                 : const SizedBox(),
           ),
           Flexible(
@@ -173,7 +164,7 @@ class PressToContinue extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    context.read<GameController>().nextTurn();
+                    context.read<GameController>().continueGame();
                   },
                   child: const Text('Press to continue'),
                 ),

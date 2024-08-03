@@ -34,6 +34,13 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void swapActivePlayer() {
+    turn = turn == GameStateTurn.playerA
+        ? GameStateTurn.playerB
+        : GameStateTurn.playerA;
+    notifyListeners();
+  }
+
   void continueGame() {
     state = GlobalGameState.attacking;
     turn = turn == GameStateTurn.playerA
@@ -103,6 +110,8 @@ class GameController extends ChangeNotifier {
       );
       selectedShipType = null;
       notifyListeners();
+    } else if (state == GlobalGameState.attacking) {
+      shootShot(selectedShot, coordinates);
     }
   }
 

@@ -9,17 +9,15 @@ class ShotSelectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<PowerShots, int> shots = Provider.of<GameController>(context)
-            .currentBoard
-            ?.availablePowerShots ??
-        {};
+    final Map<PowerShots, int> shots =
+        context.watch<GameController>().currentBoard?.availablePowerShots ?? {};
     final actualShots = shots.entries
         .where((element) => element.value > 0)
         .map((e) => e)
         .toList();
 
     final PowerShots? selectedShot =
-        Provider.of<GameController>(context).selectedShot;
+        context.read<GameController>().selectedShot;
 
     return Column(
       children: [
@@ -29,24 +27,30 @@ class ShotSelectionWidget extends StatelessWidget {
           tileColor:
               selectedShot == null ? Colors.lightBlueAccent : Colors.white,
           onTap: () {
-            Provider.of<GameController>(context).selectShot(null);
+            context.read<GameController>().selectShot(null);
           },
         ),
         ...List.generate(
-            actualShots.length,
-            (index) => _listTile(
-                context, actualShots[index].key, actualShots[index].value)),
+          actualShots.length,
+          (index) => _listTile(
+            context,
+            actualShots[index].key,
+            actualShots[index].value,
+            selectedShot == actualShots[index].key,
+          ),
+        ),
       ],
     );
   }
 
-  Widget _listTile(BuildContext context, PowerShots shot, int shotNumber) {
+  Widget _listTile(
+      BuildContext context, PowerShots shot, int shotNumber, bool isSelected) {
     return ListTile(
       title: Text(shot.toString()),
       trailing: Text(shotNumber.toString()),
-      tileColor: Colors.white,
+      tileColor: isSelected ? Colors.lightBlueAccent : Colors.white,
       onTap: () {
-        Provider.of<GameController>(context).selectShot(shot);
+        context.read<GameController>().selectShot(shot);
       },
     );
   }
