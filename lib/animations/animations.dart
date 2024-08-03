@@ -3,13 +3,12 @@ import 'package:flame/game.dart';
 
 const double _animationSpeed = 0.025;
 
-Future<SpriteAnimationComponent> addAnimation(
+Future<SpriteAnimationComponent> getAnimation(
   FlameGame game,
+  Vector2 position,
+  Vector2 size,
   Map<String, dynamic> selectedSprite,
 ) async {
-  final gameSize = game.size;
-  final size = Vector2.all(192.0);
-
   final animationComponent = SpriteAnimationComponent.fromFrameData(
     await game.images.load('${selectedSprite["name"]}.png'),
     SpriteAnimationData.sequenced(
@@ -17,13 +16,13 @@ Future<SpriteAnimationComponent> addAnimation(
       amountPerRow: selectedSprite["amountPerRow"],
       textureSize: size,
       stepTime: _animationSpeed,
-      loop: false,
+      // loop: false,
     ),
     size: size,
-    removeOnFinish: true,
+    removeOnFinish: false,
   );
 
-  animationComponent.position = gameSize / 2 - (size / 2);
+  animationComponent.position = position;
 
   return animationComponent;
 }
