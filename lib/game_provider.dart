@@ -20,6 +20,7 @@ class GameController extends ChangeNotifier {
   ShipType? selectedShipType;
   PowerShots? selectedShot;
   GamePlay? gamePlay;
+  ShipOrientation selectedShipOrientation = ShipOrientation.horizontal;
 
   static const boardGridSize = 10;
 
@@ -27,12 +28,7 @@ class GameController extends ChangeNotifier {
 
   void nextTurn() {
     selectedShot = null;
-    turn = turn == GameStateTurn.playerA
-        ? GameStateTurn.playerB
-        : GameStateTurn.playerA;
-
     gamePlay?.nextTurn();
-
     state = GlobalGameState.pressToPlay;
 
     notifyListeners();
@@ -40,6 +36,9 @@ class GameController extends ChangeNotifier {
 
   void continueGame() {
     state = GlobalGameState.attacking;
+    turn = turn == GameStateTurn.playerA
+        ? GameStateTurn.playerB
+        : GameStateTurn.playerA;
     notifyListeners();
   }
 
@@ -99,11 +98,16 @@ class GameController extends ChangeNotifier {
         Ship(
           type: selectedShipType!,
           position: coordinates,
-          orientation: ShipOrientation.horizontal,
+          orientation: selectedShipOrientation,
         ),
       );
       selectedShipType = null;
       notifyListeners();
     }
+  }
+
+  void selectShipOrientation(ShipOrientation orientation) {
+    selectedShipOrientation = orientation;
+    notifyListeners();
   }
 }

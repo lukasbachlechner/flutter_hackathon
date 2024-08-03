@@ -45,9 +45,9 @@ class BoardWidget extends StatelessWidget {
     final isHighlighted = highlighted.any((coordinate) =>
         coordinate.latitude == rowIndex && coordinate.longitude == columnIndex);
 
-    final hasShip = board.getCellStatus(coordinate);
+    final hasShip = board.cellHasShip(coordinate);
 
-    if (hasShip == CellHasWhat.ship) {
+    if (hasShip != null) {
       tileColor = Colors.blue;
     }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hackathon/game_provider.dart';
+import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
 import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 import 'package:flutter_hackathon/widgets/board.widget.dart';
 import 'package:flutter_hackathon/widgets/shot_selection.widget.dart';
@@ -62,17 +63,36 @@ class ChoosingScreen extends StatelessWidget {
               children: [
                 ...ShipType.values.map(
                   (shipType) => ListTile(
-                    onTap: () {
-                      gameController.selectShipForPlacing(shipType);
-                    },
+                    onTap: !gameController.currentBoard!
+                            .isShipTypeAlreadyAdded(shipType)
+                        ? () {
+                            gameController.selectShipForPlacing(shipType);
+                          }
+                        : null,
+                    tileColor: gameController.selectedShipType == shipType
+                        ? Colors.lightBlue
+                        : !gameController.currentBoard!
+                                .isShipTypeAlreadyAdded(shipType)
+                            ? Colors.white
+                            : Colors.grey,
                     title: Text(shipType.name),
                   ),
+                ),
+                SwitchListTile(
+                  title: const Text('Vertical orientation'),
+                  value: gameController.selectedShipOrientation ==
+                      ShipOrientation.vertical,
+                  onChanged: (value) {
+                    gameController.selectShipOrientation(value
+                        ? ShipOrientation.vertical
+                        : ShipOrientation.horizontal);
+                  },
                 ),
                 ElevatedButton(
                   onPressed: gameController.turn == GameStateTurn.playerA &&
                           gameController.game.playerA.isBoardReady()
                       ? () {
-                          context.read<GameController>().nextTurn();
+                          gameController.nextTurn();
                         }
                       : null,
                   child: const Text('Next player'),
