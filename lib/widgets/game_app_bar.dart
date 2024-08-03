@@ -13,6 +13,7 @@ class GameAppBar extends StatelessWidget {
         GlobalGameState.start => const Text('Start'),
         GlobalGameState.choosing => const Text('Choose your ships'),
         GlobalGameState.attacking => const Text('Playing'),
+        GlobalGameState.pressToPlay => const Text('Press to continue'),
         GlobalGameState.end => const Text('End'),
       },
     );

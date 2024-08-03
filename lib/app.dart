@@ -4,6 +4,7 @@ import 'package:flutter_hackathon/game_provider.dart';
 import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 import 'package:flutter_hackathon/widgets/board.widget.dart';
 import 'package:flutter_hackathon/widgets/shot_selection.widget.dart';
+import 'package:flutter_hackathon/widgets/win_screen.dart';
 import 'package:provider/provider.dart';
 
 class BattleshipApp extends StatelessWidget {
@@ -16,7 +17,7 @@ class BattleshipApp extends StatelessWidget {
       GlobalGameState.choosing => const ChoosingScreen(),
       GlobalGameState.attacking => const PlayingScreen(),
       GlobalGameState.pressToPlay => const PressToContinue(),
-      GlobalGameState.end => const SizedBox(),
+      GlobalGameState.end => const WinScreen(),
     };
   }
 }
@@ -64,7 +65,6 @@ class ChoosingScreen extends StatelessWidget {
                     onTap: () {
                       gameController.selectShipForPlacing(shipType);
                     },
-                    selected: gameController.selectedShipType == shipType,
                     title: Text(shipType.name),
                   ),
                 ),
