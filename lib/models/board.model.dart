@@ -22,7 +22,8 @@ class Board {
     PowerShots.bomb: 0,
     PowerShots.torpedo: 0,
     PowerShots.missile: 0,
-    PowerShots.radar: 0
+    PowerShots.radar: 0,
+    PowerShots.random: 0
   };
 
   void placeMines() {
@@ -109,6 +110,18 @@ class Board {
   }
 
   CellHit hitCell(Coordinates coordinates, HitType hitType) {
+    if (isCoordinateOutOfBounds(coordinates)) {
+      throw Exception('Coordinates are out of bounds');
+    }
+    for (var cellHit in cellHits) {
+      if (cellHit.coordinates.latitude == coordinates.latitude &&
+          cellHit.coordinates.longitude == coordinates.longitude) {
+        return CellHit(
+            coordinates: coordinates,
+            status: cellHit.status,
+            cellHas: CellHasWhat.alreadyHit);
+      }
+    }
     var isCellHasShip = false;
     for (var ship in ships) {
       final shipStartEndPosition = ship.getStartEndPosition();
@@ -137,6 +150,120 @@ class Board {
     cellHits.add(cellHit);
     return cellHit;
   }
+
+  List<CellHit> hitCellWithPowerShot(Coordinates coordinates,
+      PowerShots powerShot, ShipOrientation? direction) {
+    switch (powerShot) {
+      case PowerShots.bomb:
+        return hitCellWithBomb(coordinates);
+      case PowerShots.torpedo:
+        return hitCellWithTorpedo(
+            coordinates, direction ?? ShipOrientation.horizontal);
+      case PowerShots.missile:
+        return hitCellWithMissile(
+            coordinates, direction ?? ShipOrientation.horizontal);
+      case PowerShots.radar:
+        return hitCellWithRadar(coordinates);
+      case PowerShots.random:
+        // return hitCellWithRandom(coordinates);
+        throw Exception('Random power shot not implemented');
+      default:
+        throw Exception('Invalid power shot');
+    }
+  }
+
+  List<CellHit> hitCellWithBomb(Coordinates coordinates) {
+    final List<CellHit> hitCellImpacts = [];
+    final int bombRangeFromCentre = (gridSize / 20).round();
+    for (var i = coordinates.latitude - bombRangeFromCentre;
+        i <= coordinates.latitude + bombRangeFromCentre;
+        i++) {
+      for (var j = coordinates.longitude - bombRangeFromCentre;
+          j <= coordinates.longitude + bombRangeFromCentre;
+          j++) {
+        hitCellImpacts.add(
+            hitCell(Coordinates(latitude: i, longitude: j), HitType.damage));
+      }
+    }
+    powerShotsUsed[PowerShots.bomb] =
+        (powerShotsUsed[PowerShots.bomb] ?? 0) + 1;
+    return hitCellImpacts;
+  }
+
+  List<CellHit> hitCellWithTorpedo(
+      Coordinates coordinates, ShipOrientation direction) {
+    final List<CellHit> hitCellImpacts = [];
+    final int torpedoRange = (gridSize / 4).round();
+    for (var i = 0; i <= torpedoRange; i++) {
+      final latitude = direction == ShipOrientation.horizontal
+          ? coordinates.latitude
+          : coordinates.latitude + i;
+      final longitude = direction == ShipOrientation.horizontal
+          ? coordinates.longitude + i
+          : coordinates.longitude;
+      final hitCellImpact = hitCell(
+          Coordinates(latitude: latitude, longitude: longitude),
+          HitType.damage);
+      hitCellImpacts.add(hitCellImpact);
+      if (hitCellImpact.cellHas == CellHasWhat.ship) {
+        break;
+      }
+    }
+    powerShotsUsed[PowerShots.torpedo] =
+        (powerShotsUsed[PowerShots.torpedo] ?? 0) + 1;
+    return hitCellImpacts;
+  }
+
+  List<CellHit> hitCellWithMissile(
+      Coordinates coordinates, ShipOrientation direction) {
+    final List<CellHit> hitCellImpacts = [];
+    final int torpedoRange = (gridSize / 4).round();
+    for (var i = 0; i <= torpedoRange; i++) {
+      final latitude = direction == ShipOrientation.horizontal
+          ? coordinates.latitude
+          : coordinates.latitude + i;
+      final longitude = direction == ShipOrientation.horizontal
+          ? coordinates.longitude + i
+          : coordinates.longitude;
+      final hitCellImpact = hitCell(
+          Coordinates(latitude: latitude, longitude: longitude),
+          HitType.damage);
+      hitCellImpacts.add(hitCellImpact);
+    }
+    powerShotsUsed[PowerShots.missile] =
+        (powerShotsUsed[PowerShots.missile] ?? 0) + 1;
+    return hitCellImpacts;
+  }
+
+  List<CellHit> hitCellWithRadar(Coordinates coordinates) {
+    final hitCellImpact = hitCell(
+        Coordinates(
+            latitude: coordinates.latitude, longitude: coordinates.longitude),
+        HitType.damage);
+    powerShotsUsed[PowerShots.radar] =
+        (powerShotsUsed[PowerShots.radar] ?? 0) + 1;
+    return [hitCellImpact];
+  }
+
+  Map<PowerShots, int> get availablePowerShots {
+    final unsunkShips = ships.where((ship) => !ship.isSunk);
+    final availablePowerShots = {
+      PowerShots.bomb: 0,
+      PowerShots.torpedo: 0,
+      PowerShots.missile: 0,
+      PowerShots.radar: 0,
+      PowerShots.random: 0
+    };
+    for (var ship in unsunkShips) {
+      for (var powerShot in ship.type.powerShots.keys) {
+        availablePowerShots[powerShot] =
+            ship.type.powerShots[powerShot]! - powerShotsUsed[powerShot]!;
+      }
+    }
+    return availablePowerShots;
+  }
+
+  // List<CellHit> hitCellWithRandom(Coordinates coordinates) {}
 }
 
 class CellHit {
@@ -148,4 +275,4 @@ class CellHit {
       {required this.coordinates, required this.status, required this.cellHas});
 }
 
-enum CellHasWhat { ship, shipAndMine, undiscovered }
+enum CellHasWhat { ship, shipAndMine, alreadyHit, undiscovered }
