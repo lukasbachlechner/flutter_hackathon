@@ -6,7 +6,7 @@ import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
 import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 import 'package:flutter_hackathon/models/ship.model.dart';
 
-enum GlobalGameState { start, choosing, attacking, end }
+enum GlobalGameState { start, choosing, attacking, pressToPlay, end }
 
 enum GameStateTurn { playerA, playerB, transition }
 
@@ -30,13 +30,17 @@ class GameController extends ChangeNotifier {
     turn = turn == GameStateTurn.playerA
         ? GameStateTurn.playerB
         : GameStateTurn.playerA;
-    gamePlay!.nextTurn();
-    Future.delayed(durationBetweenTurns, () {
-      turn = turn == GameStateTurn.playerA
-          ? GameStateTurn.playerB
-          : GameStateTurn.playerA;
-      notifyListeners();
-    });
+
+    gamePlay?.nextTurn();
+
+    state = GlobalGameState.pressToPlay;
+
+    notifyListeners();
+  }
+
+  void continueGame() {
+    state = GlobalGameState.attacking;
+    notifyListeners();
   }
 
   void startChoosing() {

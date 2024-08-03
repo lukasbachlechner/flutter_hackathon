@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hackathon/game_provider.dart';
-import 'package:flutter_hackathon/models/board.model.dart';
-import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
 import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 import 'package:flutter_hackathon/widgets/board.widget.dart';
 import 'package:flutter_hackathon/widgets/shot_selection.widget.dart';
@@ -17,6 +15,7 @@ class BattleshipApp extends StatelessWidget {
       GlobalGameState.start => const StartScreen(),
       GlobalGameState.choosing => const ChoosingScreen(),
       GlobalGameState.attacking => const PlayingScreen(),
+      GlobalGameState.pressToPlay => const PressToContinue(),
       GlobalGameState.end => const SizedBox(),
     };
   }
@@ -134,11 +133,35 @@ class PressToContinue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        context.read<GameController>().nextTurn();
-      },
-      child: const Text('Press to continue'),
+    final gameController = context.watch<GameController>();
+
+    return Center(
+      child: Row(
+        children: [
+          Flexible(
+            flex: 3,
+            child: gameController.turn != GameStateTurn.transition
+                ? BoardWidget(
+                    board: gameController.currentBoard!,
+                    highlighted: const [],
+                  )
+                : const SizedBox(),
+          ),
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<GameController>().nextTurn();
+                  },
+                  child: const Text('Press to continue'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
