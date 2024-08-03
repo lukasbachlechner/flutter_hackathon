@@ -5,7 +5,7 @@ import 'package:flutter_hackathon/models/game.model.dart';
 import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
 import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 
-enum GlobalGameState { start, choosing, playing }
+enum GlobalGameState { start, choosing, attacking, end }
 
 enum GameStateTurn { playerA, playerB, transition }
 
@@ -42,7 +42,7 @@ class GameController extends ChangeNotifier {
   }
 
   void startPlaying() {
-    state = GlobalGameState.playing;
+    state = GlobalGameState.attacking;
 
     notifyListeners();
   }

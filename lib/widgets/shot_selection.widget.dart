@@ -5,15 +5,17 @@ import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 import 'package:provider/provider.dart';
 
 class ShotSelectionWidget extends StatelessWidget {
-  const ShotSelectionWidget({super.key, required this.shots});
-
-  final Map<PowerShots, int> shots;
+  const ShotSelectionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final Map<PowerShots, int> shots = Provider.of<GameController>(context)
+            .currentBoard
+            ?.availablePowerShots ??
+        {};
     final actualShots = shots.entries
         .where((element) => element.value > 0)
-        .map((e) => e.key)
+        .map((e) => e)
         .toList();
 
     final PowerShots? selectedShot =
@@ -30,16 +32,18 @@ class ShotSelectionWidget extends StatelessWidget {
             Provider.of<GameController>(context).selectShot(null);
           },
         ),
-        ...List.generate(actualShots.length,
-            (index) => _listTile(context, actualShots[index])),
+        ...List.generate(
+            actualShots.length,
+            (index) => _listTile(
+                context, actualShots[index].key, actualShots[index].value)),
       ],
     );
   }
 
-  Widget _listTile(BuildContext context, PowerShots shot) {
+  Widget _listTile(BuildContext context, PowerShots shot, int shotNumber) {
     return ListTile(
       title: Text(shot.toString()),
-      trailing: Text(shots[shot].toString()),
+      trailing: Text(shotNumber.toString()),
       tileColor: Colors.white,
       onTap: () {
         Provider.of<GameController>(context).selectShot(shot);

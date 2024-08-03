@@ -4,6 +4,7 @@ import 'package:flutter_hackathon/game_provider.dart';
 import 'package:flutter_hackathon/models/board.model.dart';
 import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
 import 'package:flutter_hackathon/widgets/board.widget.dart';
+import 'package:flutter_hackathon/widgets/shot_selection.widget.dart';
 import 'package:provider/provider.dart';
 
 class BattleshipApp extends StatelessWidget {
@@ -14,7 +15,8 @@ class BattleshipApp extends StatelessWidget {
     return switch (context.watch<GameController>().state) {
       GlobalGameState.start => const StartScreen(),
       GlobalGameState.choosing => const ChoosingScreen(),
-      GlobalGameState.playing => const PlayingScreen(),
+      GlobalGameState.attacking => const PlayingScreen(),
+      GlobalGameState.end => const SizedBox(),
     };
   }
 }
@@ -86,10 +88,29 @@ class PlayingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: ElevatedButton(
-        onPressed: null,
-        child: Text('End the game'),
+    final gameController = context.watch<GameController>();
+
+    return Center(
+      child: Row(
+        children: [
+          Flexible(
+            flex: 3,
+            child: gameController.turn != GameStateTurn.transition
+                ? BoardWidget(
+                    board: gameController.currentBoard!,
+                    highlighted: const [],
+                  )
+                : const SizedBox(),
+          ),
+          const Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ShotSelectionWidget(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

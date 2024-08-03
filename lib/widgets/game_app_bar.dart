@@ -11,7 +11,8 @@ class GameAppBar extends StatelessWidget {
       title: switch (context.watch<GameController>().state) {
         GlobalGameState.start => const Text('Start'),
         GlobalGameState.choosing => const Text('Choose your ships'),
-        GlobalGameState.playing => const Text('Playing'),
+        GlobalGameState.attacking => const Text('Playing'),
+        GlobalGameState.end => const Text('End'),
       },
     );
   }
