@@ -19,6 +19,7 @@ class GameController extends ChangeNotifier {
   GlobalGameState state = GlobalGameState.start;
   ShipType? selectedShipType;
   PowerShots? selectedShot;
+  GamePlay? gamePlay;
 
   static const boardGridSize = 10;
 
@@ -29,7 +30,13 @@ class GameController extends ChangeNotifier {
     turn = turn == GameStateTurn.playerA
         ? GameStateTurn.playerB
         : GameStateTurn.playerA;
-    notifyListeners();
+    gamePlay!.nextTurn();
+    Future.delayed(durationBetweenTurns, () {
+      turn = turn == GameStateTurn.playerA
+          ? GameStateTurn.playerB
+          : GameStateTurn.playerA;
+      notifyListeners();
+    });
   }
 
   void startChoosing() {
@@ -39,6 +46,12 @@ class GameController extends ChangeNotifier {
   }
 
   void startPlaying() {
+    state = GlobalGameState.attacking;
+    if (!game.isGameReadyToStart()) {
+      throw Exception('Game is not ready to start');
+    }
+    game.startGame();
+    gamePlay = GamePlay(game: game);
     state = GlobalGameState.attacking;
 
     notifyListeners();
@@ -51,7 +64,9 @@ class GameController extends ChangeNotifier {
 
   void shootShot(PowerShots? shot, Coordinates coordinates) {
     // final board = currentBoard!;
+    gamePlay!.hitCell(coordinates, shot, null);
 
+    nextTurn();
     notifyListeners();
   }
 
