@@ -14,6 +14,7 @@ class Ship {
   final ShipType type;
   final Coordinates position;
   final ShipOrientation orientation;
+  final List<Coordinates> hitsOnShip = [];
 
   CoordinatesTuple getStartEndPosition() {
     Coordinates start = position;
@@ -30,5 +31,14 @@ class Ship {
     }
 
     return CoordinatesTuple(start, end);
+  }
+
+  get isSunk => hitsOnShip.length == type.size;
+
+  void hitShip(Coordinates hitCoordinates) {
+    if (hitsOnShip.contains(hitCoordinates)) {
+      return;
+    }
+    hitsOnShip.add(hitCoordinates);
   }
 }

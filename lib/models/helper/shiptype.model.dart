@@ -3,7 +3,7 @@ enum ShipType {
   battleship(size: 4, name: 'Battleship', powerShots: {PowerShots.torpedo: 1}),
   cruiser(size: 3, name: 'Cruiser', powerShots: {PowerShots.missile: 1}),
   submarine(size: 3, name: 'Submarine', powerShots: {PowerShots.radar: 1}),
-  destroyer(size: 2, name: 'Destroyer', powerShots: {});
+  destroyer(size: 2, name: 'Destroyer', powerShots: {PowerShots.random: 1});
 
   final int size;
   final String name;
@@ -12,4 +12,4 @@ enum ShipType {
       {required this.size, required this.name, required this.powerShots});
 }
 
-enum PowerShots { bomb, torpedo, missile, radar }
+enum PowerShots { bomb, torpedo, missile, radar, random }

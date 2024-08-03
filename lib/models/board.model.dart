@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
+import 'package:flutter_hackathon/models/helper/hits.model.dart';
 import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 import 'package:flutter_hackathon/models/ship.model.dart';
 
@@ -16,6 +17,13 @@ class Board {
   final List<Coordinates> mines = [];
 
   final List<Ship> ships = [];
+  final List<CellHit> cellHits = [];
+  final Map<PowerShots, int> powerShotsUsed = {
+    PowerShots.bomb: 0,
+    PowerShots.torpedo: 0,
+    PowerShots.missile: 0,
+    PowerShots.radar: 0
+  };
 
   void placeMines() {
     final mineCount = gridSize / 10;
@@ -89,4 +97,48 @@ class Board {
     }
     return false;
   }
+
+  CellHit hitCell(Coordinates coordinates, HitType hitType) {
+    var isCellHasShip = false;
+    for (var ship in ships) {
+      final shipStartEndPosition = ship.getStartEndPosition();
+      if (shipStartEndPosition.start.latitude <= coordinates.latitude &&
+          shipStartEndPosition.end.latitude >= coordinates.latitude &&
+          shipStartEndPosition.start.longitude <= coordinates.longitude &&
+          shipStartEndPosition.end.longitude >= coordinates.longitude) {
+        if (hitType == HitType.damage) {
+          ship.hitShip(coordinates);
+        }
+        isCellHasShip = true;
+        break;
+      }
+    }
+    final isCellHasMine = mines.any((mine) =>
+        mine.latitude == coordinates.latitude &&
+        mine.longitude == coordinates.longitude);
+    final cellHit = CellHit(
+        coordinates: coordinates,
+        status: hitType,
+        cellHas: isCellHasShip
+            ? isCellHasMine
+                ? CellHasWhat.shipAndMine
+                : CellHasWhat.ship
+            : CellHasWhat.ship);
+    cellHits.add(cellHit);
+    return cellHit;
+  }
+}
+
+class CellHit {
+  final Coordinates coordinates;
+  final HitType status;
+  final CellHasWhat cellHas;
+
+  CellHit(
+      {required this.coordinates, required this.status, required this.cellHas});
+}
+
+enum CellHasWhat {
+  ship,
+  shipAndMine,
 }

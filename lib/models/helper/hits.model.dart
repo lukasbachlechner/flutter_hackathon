@@ -1,0 +1,1 @@
+enum HitType { reveal, damage }
