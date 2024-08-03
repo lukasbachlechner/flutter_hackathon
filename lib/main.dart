@@ -1,10 +1,11 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hackathon/animations/animations_list.dart';
 import 'package:flutter_hackathon/constants/constants.dart';
 
+import 'animations/animations.dart';
 import 'components/field_component.dart';
 
 void main() async {
@@ -45,27 +46,32 @@ class GameWrapper extends StatelessWidget {
 
 const boardSideResolution = 20;
 
-class BattleshipGame extends FlameGame {
+class BattleshipGame extends FlameGame with HasGameRef {
   BattleshipGame();
 
   @override
-  void onLoad() {
+  void onLoad() async {
+    final x = gameRef.images.load('${{}["name"]}.png');
     // add(AlignComponent(
     //   child: TextComponent(text: 'Battleships', position: Vector2.zero()),
     //   alignment: Anchor.center,
     // ));
 
-    for (var i = 0; i < boardSideResolution; i++) {
-      for (var j = 0; j < boardSideResolution; j++) {
-        add(Field(
-          position: Vector2(i * gameWidth / boardSideResolution,
-              j * gameWidth / boardSideResolution),
-          size: Vector2(
-              gameWidth / boardSideResolution, gameWidth / boardSideResolution),
-          fieldData: 'data',
-        ));
-      }
-    }
+    // for (var i = 0; i < boardSideResolution; i++) {
+    //   for (var j = 0; j < boardSideResolution; j++) {
+    //     add(Field(
+    //       position: Vector2(i * gameWidth / boardSideResolution,
+    //           j * gameWidth / boardSideResolution),
+    //       size: Vector2(
+    //           gameWidth / boardSideResolution, gameWidth / boardSideResolution),
+    //       fieldData: 'data',
+    //     ));
+    //   }
+    // }
+
+    add(
+      await addAnimation(gameRef, animationsList.first),
+    );
 
     // add(Quadrant(
     //   position: Vector2(100, 100),
