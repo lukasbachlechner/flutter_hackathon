@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_hackathon/mechanics/gameplay.dart';
 import 'package:flutter_hackathon/models/board.model.dart';
 import 'package:flutter_hackathon/models/game.model.dart';
+import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
 import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 
 enum GlobalGameState { start, choosing, playing }
@@ -17,16 +19,6 @@ class GameController extends ChangeNotifier {
   PowerShots? selectedShot;
 
   static const boardGridSize = 10;
-
-  Board playerABoard = Board(
-    name: 'Player A',
-    gridSize: boardGridSize,
-  );
-
-  Board playerBBoard = Board(
-    name: 'Player B',
-    gridSize: boardGridSize,
-  );
 
   final durationBetweenTurns = const Duration(seconds: 1);
 
@@ -45,16 +37,30 @@ class GameController extends ChangeNotifier {
 
   void startChoosing() {
     state = GlobalGameState.choosing;
+
     notifyListeners();
   }
 
   void startPlaying() {
     state = GlobalGameState.playing;
+
     notifyListeners();
   }
 
   void selectShot(PowerShots? shot) {
     selectedShot = shot;
+    notifyListeners();
+  }
+
+  void shootShot(PowerShots? shot, Coordinates coordinates) {
+    // final board = currentBoard!;
+
+    notifyListeners();
+  }
+
+  void onCoordinatesClicked(Coordinates coordinates) {
+    final board = currentBoard!;
+
     notifyListeners();
   }
 
