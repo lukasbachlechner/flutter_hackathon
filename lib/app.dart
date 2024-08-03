@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hackathon/game_provider.dart';
 import 'package:flutter_hackathon/models/board.model.dart';
+import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
 import 'package:flutter_hackathon/widgets/board.widget.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,10 @@ class ChoosingScreen extends StatelessWidget {
           Flexible(
             flex: 3,
             child: gameController.turn != GameStateTurn.transition
-                ? BoardWidget(board: gameController.currentBoard!)
+                ? BoardWidget(
+                    board: gameController.currentBoard!,
+                    highlighted: const [],
+                  )
                 : const SizedBox(),
           ),
           Flexible(

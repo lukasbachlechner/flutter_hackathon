@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter_hackathon/constants/constants.dart';
 import 'package:flutter_hackathon/models/board.model.dart';
+import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
 
 class BoardWidget extends StatelessWidget {
-  const BoardWidget({super.key, required this.board});
+  const BoardWidget(
+      {super.key, required this.board, this.highlighted = const []});
 
   final Board board;
+  final List<Coordinates> highlighted;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,8 @@ class BoardWidget extends StatelessWidget {
 
   Widget _buildTile(int columnIndex, int rowIndex) {
     // final tile = board.tiles[rowIndex][columnIndex];
+    final isHighlighted = highlighted.any((coordinate) =>
+        coordinate.latitude == rowIndex && coordinate.longitude == columnIndex);
 
     return GestureDetector(
       onTap: () {
@@ -43,7 +48,7 @@ class BoardWidget extends StatelessWidget {
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
-          color: Colors.white,
+          color: isHighlighted ? Colors.red : Colors.white,
         ),
         width: tileSizePx,
         height: tileSizePx,
