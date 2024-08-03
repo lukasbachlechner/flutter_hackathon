@@ -50,11 +50,25 @@ class ChoosingScreen extends StatelessWidget {
                 : const SizedBox(),
           ),
           Flexible(
-            child: ElevatedButton(
-              onPressed: () {
-                context.read<GameController>().startPlaying();
-              },
-              child: const Text('Done choosing'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<GameController>().startPlaying();
+                  },
+                  child: const Text('Next player'),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: gameController.game.isGameReadyToStart()
+                      ? () {
+                          context.read<GameController>().startPlaying();
+                        }
+                      : null,
+                  child: const Text('Done choosing'),
+                ),
+              ],
             ),
           ),
         ],

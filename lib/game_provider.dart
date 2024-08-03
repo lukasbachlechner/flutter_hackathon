@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hackathon/models/board.model.dart';
+import 'package:flutter_hackathon/models/game.model.dart';
 import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 
 enum GlobalGameState { start, choosing, playing }
@@ -7,7 +8,9 @@ enum GlobalGameState { start, choosing, playing }
 enum GameStateTurn { playerA, playerB, transition }
 
 class GameController extends ChangeNotifier {
-  GameController();
+  GameController(this.game);
+
+  final Game game;
 
   GameStateTurn turn = GameStateTurn.playerA;
   GlobalGameState state = GlobalGameState.start;
@@ -57,8 +60,8 @@ class GameController extends ChangeNotifier {
 
   Board? get currentBoard {
     return switch (turn) {
-      GameStateTurn.playerA => playerABoard,
-      GameStateTurn.playerB => playerBBoard,
+      GameStateTurn.playerA => game.playerA,
+      GameStateTurn.playerB => game.playerB,
       GameStateTurn.transition => null,
     };
   }

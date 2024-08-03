@@ -1,6 +1,6 @@
 import 'package:flutter_hackathon/models/board.model.dart';
 
-const int gridSize = 100;
+const int gridSize = 10;
 
 class Game {
   final Board playerA = Board(name: 'Player A', gridSize: gridSize);
