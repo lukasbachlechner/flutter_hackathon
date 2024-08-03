@@ -83,6 +83,19 @@ class Board {
     return CellHasWhat.undiscovered;
   }
 
+  ShipType? cellHasShip(Coordinates coordinates) {
+    for (var ship in ships) {
+      final shipStartEndPosition = ship.getStartEndPosition();
+      if (shipStartEndPosition.start.latitude <= coordinates.latitude &&
+          shipStartEndPosition.end.latitude >= coordinates.latitude &&
+          shipStartEndPosition.start.longitude <= coordinates.longitude &&
+          shipStartEndPosition.end.longitude >= coordinates.longitude) {
+        return ship.type;
+      }
+    }
+    return null;
+  }
+
   bool isCoordinateOutOfBounds(Coordinates coordinates) {
     return coordinates.latitude < 0 ||
         coordinates.latitude >= gridSize ||
