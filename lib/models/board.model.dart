@@ -72,6 +72,16 @@ class Board {
     return ships.length == 5;
   }
 
+  CellHasWhat getCellStatus(Coordinates coordinates) {
+    for (var cellHit in cellHits) {
+      if (cellHit.coordinates.latitude == coordinates.latitude &&
+          cellHit.coordinates.longitude == coordinates.longitude) {
+        return cellHit.cellHas;
+      }
+    }
+    return CellHasWhat.undiscovered;
+  }
+
   bool isCoordinateOutOfBounds(Coordinates coordinates) {
     return coordinates.latitude < 0 ||
         coordinates.latitude >= gridSize ||
@@ -138,7 +148,4 @@ class CellHit {
       {required this.coordinates, required this.status, required this.cellHas});
 }
 
-enum CellHasWhat {
-  ship,
-  shipAndMine,
-}
+enum CellHasWhat { ship, shipAndMine, undiscovered }
