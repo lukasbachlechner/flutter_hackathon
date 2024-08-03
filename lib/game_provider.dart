@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hackathon/models/board.model.dart';
+import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 
 enum GlobalGameState { start, choosing, playing }
 
@@ -10,6 +11,7 @@ class GameController extends ChangeNotifier {
 
   GameStateTurn turn = GameStateTurn.playerA;
   GlobalGameState state = GlobalGameState.start;
+  PowerShots? selectedShot;
 
   static const boardGridSize = 10;
 
@@ -27,6 +29,7 @@ class GameController extends ChangeNotifier {
 
   void nextTurn() {
     turn = GameStateTurn.transition;
+    selectedShot = null;
     notifyListeners();
 
     Future.delayed(durationBetweenTurns, () {
@@ -44,6 +47,11 @@ class GameController extends ChangeNotifier {
 
   void startPlaying() {
     state = GlobalGameState.playing;
+    notifyListeners();
+  }
+
+  void selectShot(PowerShots? shot) {
+    selectedShot = shot;
     notifyListeners();
   }
 

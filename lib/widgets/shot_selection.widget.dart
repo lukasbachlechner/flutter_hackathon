@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hackathon/game_provider.dart';
 import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
+import 'package:provider/provider.dart';
 
 class ShotSelectionWidget extends StatelessWidget {
   const ShotSelectionWidget({super.key, required this.shots});
@@ -14,7 +16,8 @@ class ShotSelectionWidget extends StatelessWidget {
         .map((e) => e.key)
         .toList();
 
-    final PowerShots? selectedShot;
+    final PowerShots? selectedShot =
+        Provider.of<GameController>(context).selectedShot;
 
     return Column(
       children: [
@@ -24,22 +27,22 @@ class ShotSelectionWidget extends StatelessWidget {
           tileColor:
               selectedShot == null ? Colors.lightBlueAccent : Colors.white,
           onTap: () {
-            // TODO: select basic shot
+            Provider.of<GameController>(context).selectShot(null);
           },
         ),
-        ...List.generate(
-            actualShots.length, (index) => _listTile(actualShots[index])),
+        ...List.generate(actualShots.length,
+            (index) => _listTile(context, actualShots[index])),
       ],
     );
   }
 
-  Widget _listTile(PowerShots shot) {
+  Widget _listTile(BuildContext context, PowerShots shot) {
     return ListTile(
       title: Text(shot.toString()),
       trailing: Text(shots[shot].toString()),
       tileColor: Colors.white,
       onTap: () {
-        // TODO: select shot
+        Provider.of<GameController>(context).selectShot(shot);
       },
     );
   }
