@@ -24,6 +24,7 @@ class BoardTileComponent extends RectangleComponent
 
   bool tapped = false;
   bool hovered = false;
+  Color legalColor = Colors.red;
 
   void setHovered(bool value) {
     hovered = value;
@@ -46,23 +47,27 @@ class BoardTileComponent extends RectangleComponent
           size.y,
         ),
         Paint()
-          ..color = Colors.yellow
-          ..strokeWidth = 2,
-      );
-    } else if (tapped) {
-      canvas.drawRect(
-        Rect.fromLTWH(
-          0,
-          0,
-          size.x,
-          size.y,
-        ),
-        Paint()
-          ..color = Colors.green
+          ..color = legalColor
           ..strokeWidth = 2,
       );
     }
 
     super.render(canvas);
+  }
+
+  bool isWithinBounds() {
+    print('position: $position, size: $size');
+    return position.x >= 0 &&
+        position.y >= 0 &&
+        position.x <= size.x &&
+        position.y <= size.y;
+  }
+
+  void setLegalHover(bool value) {
+    if (value) {
+      legalColor = Colors.green;
+    } else {
+      legalColor = Colors.red;
+    }
   }
 }

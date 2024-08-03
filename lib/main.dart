@@ -1,33 +1,24 @@
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
-import 'package:flutter_hackathon/constants/constants.dart';
+import 'package:flutter_hackathon/app.dart';
 import 'package:flutter_hackathon/game.dart';
+import 'package:flutter_hackathon/game_provider.dart';
+import 'package:flutter_hackathon/widgets/game_app_bar.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
-  runApp(const GameWrapper());
-
-  await Flame.device.fullScreen();
-}
-
-class GameWrapper extends StatelessWidget {
-  const GameWrapper({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.lightBlue,
-      ),
-      home: Scaffold(
-        body: SafeArea(
-          child: GameWidget(
-            game: BattleshipGame(),
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => GameController(),
+      child: MaterialApp(
+        theme: ThemeData(),
+        home: Scaffold(
+          body: const BattleshipApp(),
+          appBar: AppBar(
+            title: const GameAppBar(),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

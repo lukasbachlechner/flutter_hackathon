@@ -53,14 +53,12 @@ class BattleshipGame extends FlameGame with HasKeyboardHandlerComponents {
     );
 
     add(
-      AlignComponent(
-        child: ButtonComponent(
-          onPressed: toggleSelection,
-          button:
-              TextComponent(text: 'Toggle selection', position: Vector2.zero()),
-          position: Vector2.zero(),
-        ),
-        alignment: Anchor.topRight,
+      ButtonComponent(
+        onPressed: toggleSelection,
+        button:
+            TextComponent(text: 'Toggle selection', position: Vector2.zero()),
+        position: Vector2(1000, 400),
+        anchor: Anchor.topLeft,
       ),
     );
 

@@ -58,9 +58,10 @@ class BoardComponent extends PositionComponent
             _getBottomNeighbors(selectedTileIndex, game.selectedShipSize);
       }
 
-      tile.setHovered(true);
-      for (var tile in neighbors) {
-        tile.setHovered(true);
+      final isLegal = _areAllTilesWithinBounds(tile, neighbors);
+      for (var element in [tile, ...neighbors]) {
+        element.setHovered(true);
+        element.setLegalHover(isLegal);
       }
     }
 
@@ -99,5 +100,15 @@ class BoardComponent extends PositionComponent
     }
 
     return bottomNeighbors;
+  }
+
+  bool _areAllTilesWithinBounds(
+      BoardTileComponent tile, List<BoardTileComponent> neighbors) {
+    for (var element in [tile, ...neighbors]) {
+      if (!element.isWithinBounds()) {
+        return false;
+      }
+    }
+    return true;
   }
 }
