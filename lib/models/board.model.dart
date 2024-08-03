@@ -151,6 +151,10 @@ class Board {
     return cellHit;
   }
 
+  isAllShipSunk() {
+    return ships.every((ship) => ship.isSunk);
+  }
+
   List<CellHit> hitCellWithPowerShot(Coordinates coordinates,
       PowerShots powerShot, ShipOrientation? direction) {
     switch (powerShot) {
@@ -181,6 +185,9 @@ class Board {
       for (var j = coordinates.longitude - bombRangeFromCentre;
           j <= coordinates.longitude + bombRangeFromCentre;
           j++) {
+        if (i < 0 || i >= gridSize || j < 0 || j >= gridSize) {
+          continue;
+        }
         hitCellImpacts.add(
             hitCell(Coordinates(latitude: i, longitude: j), HitType.damage));
       }
@@ -201,6 +208,12 @@ class Board {
       final longitude = direction == ShipOrientation.horizontal
           ? coordinates.longitude + i
           : coordinates.longitude;
+      if (latitude < 0 ||
+          latitude >= gridSize ||
+          longitude < 0 ||
+          longitude >= gridSize) {
+        continue;
+      }
       final hitCellImpact = hitCell(
           Coordinates(latitude: latitude, longitude: longitude),
           HitType.damage);
@@ -228,6 +241,12 @@ class Board {
       final hitCellImpact = hitCell(
           Coordinates(latitude: latitude, longitude: longitude),
           HitType.damage);
+      if (latitude < 0 ||
+          latitude >= gridSize ||
+          longitude < 0 ||
+          longitude >= gridSize) {
+        continue;
+      }
       hitCellImpacts.add(hitCellImpact);
     }
     powerShotsUsed[PowerShots.missile] =
