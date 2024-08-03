@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
 import '../models/ship.model.dart';
@@ -15,7 +16,7 @@ Color colorOfState(ShipPlacementState state) {
   }
 }
 
-class ShipSelectionComponent extends RectangleComponent {
+class ShipSelectionComponent extends RectangleComponent with TapCallbacks {
   ShipSelectionComponent({
     required this.ship,
     required Vector2 position,
@@ -27,6 +28,11 @@ class ShipSelectionComponent extends RectangleComponent {
 
   final Ship ship;
   final ShipPlacementState state;
+
+  // @override
+  // bool onTapUp() {
+  //   return true;
+  // }
 }
 
 enum ShipPlacementState { available, placing, placed }
