@@ -22,7 +22,7 @@ class ShipSelectionComponent extends RectangleComponent with TapCallbacks {
     required Vector2 position,
     this.state = ShipPlacementState.available,
   }) : super(
-            size: sizeOfShip(ship)..scale(100),
+            size: sizeOfShip(ship),
             position: position,
             paint: Paint()..color = colorOfState(state));
 

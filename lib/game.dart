@@ -7,13 +7,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hackathon/components/board_component.dart';
 import 'package:flutter_hackathon/components/board_tile_component.dart';
 
+import 'components/ship_selection_component.dart';
+import 'models/helper/coordinates.model.dart';
+import 'models/helper/shiptype.model.dart';
+import 'models/ship.model.dart';
+
+const int gridSize = 10;
+const double itemSize = 48.0;
+
 class BattleshipGame extends FlameGame with HasKeyboardHandlerComponents {
   BattleshipGame();
 
   final List<BoardTileComponent> board = [];
-
-  final int gridSize = 10;
-  final double itemSize = 48.0;
 
   bool selectionIsHorizontal = true;
 
@@ -54,6 +59,20 @@ class BattleshipGame extends FlameGame with HasKeyboardHandlerComponents {
           button:
               TextComponent(text: 'Toggle selection', position: Vector2.zero()),
           position: Vector2.zero(),
+        ),
+        alignment: Anchor.topRight,
+      ),
+    );
+
+    add(
+      AlignComponent(
+        child: ShipSelectionComponent(
+          ship: Ship(
+            type: ShipType.battleship,
+            orientation: ShipOrientation.vertical,
+            position: Coordinates(latitude: 0, longitude: 0),
+          ),
+          position: Vector2(1000, 400),
         ),
         alignment: Anchor.topRight,
       ),

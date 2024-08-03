@@ -74,7 +74,7 @@ class BoardComponent extends PositionComponent
     final countToReturn = shipSize - 1;
 
     for (var i = 1; i <= countToReturn; i++) {
-      final targetIndex = selectedTileIndex + (game.gridSize * i);
+      final targetIndex = selectedTileIndex + (gridSize * i);
 
       if (targetIndex < tiles.length) {
         rightNeighbors.add(tiles[targetIndex]);

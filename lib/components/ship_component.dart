@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hackathon/game.dart';
 import 'package:flutter_hackathon/models/ship.model.dart';
 
 import '../models/helper/coordinates.model.dart';
@@ -13,9 +14,9 @@ Vector2 positionOfShip(Ship ship) {
 
 Vector2 sizeOfShip(Ship ship) {
   if (ship.orientation == ShipOrientation.horizontal) {
-    return Vector2(ship.type.size.toDouble(), 1);
+    return Vector2(ship.type.size.toDouble() * itemSize, itemSize);
   } else {
-    return Vector2(1, ship.type.size.toDouble());
+    return Vector2(itemSize, ship.type.size.toDouble() * itemSize);
   }
 }
 
