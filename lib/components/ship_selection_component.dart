@@ -8,11 +8,11 @@ import 'ship_component.dart';
 Color colorOfState(ShipPlacementState state) {
   switch (state) {
     case ShipPlacementState.available:
-      return Colors.green;
+      return const Color.fromARGB(255, 62, 62, 62);
     case ShipPlacementState.placing:
-      return Colors.yellow;
+      return Color.fromARGB(255, 127, 191, 247);
     case ShipPlacementState.placed:
-      return Colors.red;
+      return const Color.fromARGB(255, 225, 225, 225);
   }
 }
 
@@ -22,17 +22,26 @@ class ShipSelectionComponent extends RectangleComponent with TapCallbacks {
     required Vector2 position,
     this.state = ShipPlacementState.available,
   }) : super(
-            size: sizeOfShip(ship),
+            size: sizeOfShip(ship)..scale(100),
             position: position,
             paint: Paint()..color = colorOfState(state));
 
   final Ship ship;
-  final ShipPlacementState state;
+  ShipPlacementState state;
 
-  // @override
-  // bool onTapUp() {
-  //   return true;
-  // }
+  @override
+  bool onTapUp(TapUpEvent event) {
+    if (state == ShipPlacementState.available) {
+      state = ShipPlacementState.placing;
+    } else if (state == ShipPlacementState.placing) {
+      state = ShipPlacementState.placed;
+    } else {
+      state = ShipPlacementState.available;
+    }
+
+    paint = Paint()..color = colorOfState(state);
+    return true;
+  }
 }
 
 enum ShipPlacementState { available, placing, placed }
