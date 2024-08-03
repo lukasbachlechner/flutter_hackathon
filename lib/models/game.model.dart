@@ -5,6 +5,7 @@ const int gridSize = 100;
 class Game {
   final Board playerA = Board(name: 'Player A', gridSize: gridSize);
   final Board playerB = Board(name: 'Player B', gridSize: gridSize);
+  bool gameStarted = false;
 
   bool isGameReadyToStart() {
     return playerA.isBoardReady() && playerB.isBoardReady();
@@ -20,5 +21,6 @@ class Game {
     if (!isGameReadyToStart()) {
       throw Exception('Game is not ready to start');
     }
+    gameStarted = true;
   }
 }
