@@ -7,6 +7,7 @@ class GameAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gameController = context.watch<GameController>();
     return AppBar(
       title: switch (context.watch<GameController>().state) {
         GlobalGameState.start => const Text('Start'),

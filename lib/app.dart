@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hackathon/game_provider.dart';
 import 'package:flutter_hackathon/models/board.model.dart';
 import 'package:flutter_hackathon/models/helper/coordinates.model.dart';
+import 'package:flutter_hackathon/models/helper/shiptype.model.dart';
 import 'package:flutter_hackathon/widgets/board.widget.dart';
 import 'package:flutter_hackathon/widgets/shot_selection.widget.dart';
 import 'package:provider/provider.dart';
@@ -59,10 +60,22 @@ class ChoosingScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                ...ShipType.values.map(
+                  (shipType) => ListTile(
+                    onTap: () {
+                      gameController.selectShipForPlacing(shipType);
+                    },
+                    selected: gameController.selectedShipType == shipType,
+                    title: Text(shipType.name),
+                  ),
+                ),
                 ElevatedButton(
-                  onPressed: () {
-                    context.read<GameController>().startPlaying();
-                  },
+                  onPressed: gameController.turn == GameStateTurn.playerA &&
+                          gameController.game.playerA.isBoardReady()
+                      ? () {
+                          context.read<GameController>().nextTurn();
+                        }
+                      : null,
                   child: const Text('Next player'),
                 ),
                 const SizedBox(height: 10),
