@@ -23,4 +23,15 @@ class Game {
     }
     gameStarted = true;
   }
+
+  isGameOver() {
+    return playerA.isAllShipSunk() || playerB.isAllShipSunk();
+  }
+
+  Board getWinner() {
+    if (!isGameOver()) {
+      throw Exception('Game is not over yet');
+    }
+    return playerA.isAllShipSunk() ? playerB : playerA;
+  }
 }
