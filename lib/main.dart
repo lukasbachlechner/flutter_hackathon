@@ -5,7 +5,7 @@ import 'package:flame/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hackathon/constants/constants.dart';
 
-import 'components/field.dart';
+import 'components/field_component.dart';
 
 void main() async {
   runApp(const GameWrapper());
