@@ -239,7 +239,7 @@ class Board {
     final hitCellImpact = hitCell(
         Coordinates(
             latitude: coordinates.latitude, longitude: coordinates.longitude),
-        HitType.damage);
+        HitType.reveal);
     powerShotsUsed[PowerShots.radar] =
         (powerShotsUsed[PowerShots.radar] ?? 0) + 1;
     return [hitCellImpact];
