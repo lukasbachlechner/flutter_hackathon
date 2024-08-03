@@ -128,3 +128,17 @@ class PlayingScreen extends StatelessWidget {
     );
   }
 }
+
+class PressToContinue extends StatelessWidget {
+  const PressToContinue({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        context.read<GameController>().nextTurn();
+      },
+      child: const Text('Press to continue'),
+    );
+  }
+}
