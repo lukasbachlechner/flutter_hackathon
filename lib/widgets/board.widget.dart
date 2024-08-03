@@ -47,8 +47,16 @@ class BoardWidget extends StatelessWidget {
 
     final hasShip = board.cellHasShip(coordinate);
 
+    final cellStatus = board.getCellStatus(coordinate);
+
     if (hasShip != null) {
       tileColor = Colors.blue;
+    } else if (cellStatus == CellHasWhat.undiscovered) {
+      tileColor = Colors.white;
+    } else if (cellStatus == CellHasWhat.alreadyHit) {
+      tileColor = Color.fromARGB(255, 19, 19, 19);
+    } else if (cellStatus == CellHasWhat.shipAndMine) {
+      tileColor = const Color.fromARGB(255, 141, 36, 29);
     }
 
     return GestureDetector(
@@ -59,7 +67,9 @@ class BoardWidget extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4), color: tileColor),
+          borderRadius: BorderRadius.circular(4),
+          color: tileColor,
+        ),
         width: tileSizePx,
         height: tileSizePx,
       ),
