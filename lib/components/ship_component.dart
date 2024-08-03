@@ -38,9 +38,4 @@ class ShipComponent extends PositionComponent {
       Paint()..color = Colors.green,
     );
   }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-  }
 }
