@@ -5,4 +5,4 @@ class Coordinates {
   const Coordinates({required this.latitude, required this.longitude});
 }
 
-enum Orientation { horizontal, vertical }
+enum ShipOrientation { horizontal, vertical }
